@@ -7,9 +7,15 @@ require('./index.scss');
 // ES6 React
 import React from 'react';
 import ReactDom from 'react-dom';
+// 引入组件
+import Header from './Header/Header';
+import Footer from './Footer/Footer';
 
 ReactDom.render(
-  <h1>Hello,React!</h1>,
+  <div>
+    <Header />
+    <Footer />
+  </div>,
   document.getElementById('root')
 );
 
