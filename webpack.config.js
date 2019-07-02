@@ -12,6 +12,7 @@ module.exports = {
   module: {
     // 加载器配置
     loaders: [
+      { test: /\.js$/, loader: 'babel-loader' },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
       { test: /\.scss$/, loader: 'style-loader!css-loader!sass-loader' },
       { test: /\.(png|jpg|jpeg)$/, loader: 'url-loader?limit=8192' }
