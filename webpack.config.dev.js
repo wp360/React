@@ -1,10 +1,28 @@
 const path = require('path');
 const fs = require('fs');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 // path.resolve() 方法会把一个路径或路径片段的序列解析为一个绝对路径。
 const srcRoot = path.resolve(__dirname, 'src');
 const devPath = path.resolve(__dirname, 'dev');
 const pageDir = path.resolve(srcRoot, 'page');
 const mainFile = 'index.js';
+
+function getHtmlArray(entryMap) {
+  let htmlArray = [];
+  Object.keys(entryMap).forEach((key)=>{
+    let fullPathName = path.resolve(pageDir, key);
+    let fileName = path.resolve(fullPathName, key+'.html');
+
+    if(fs.existsSync(fileName)) {
+      htmlArray.push(new HtmlWebPackPlugin({
+        filename: key + '.html',
+        template: fileName,
+        chunks: [key]
+      }));
+    }
+  });
+  return htmlArray;
+}
 
 function getEntry() {
   let entryMap = {};
@@ -24,6 +42,7 @@ function getEntry() {
 }
 
 const entryMap = getEntry();
+const htmlArray = getHtmlArray(entryMap);
 
 module.exports = {
   mode: 'development',
@@ -44,10 +63,18 @@ module.exports = {
         include: srcRoot
       },
       {
+        test: /\.(js|jsx)$/,
+        use: [{loader: 'babel-loader'}],
+        include: srcRoot
+      },
+      {
         test: /\.(png|jpg|jpeg)$/,
         use: 'url-loader?limit=8192',
         include: srcRoot
       }
     ]
-  }
+  },
+  plugins: [
+    // new HtmlWebPackPlugin()
+  ].concat(htmlArray)
 }
