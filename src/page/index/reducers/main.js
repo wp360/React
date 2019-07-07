@@ -5,3 +5,4 @@ const reducers = combineReducers({
   tabReducer
 });
 
+export default reducers;
