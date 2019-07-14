@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {addTodo} from '../actions/tabAction';
+import BottomBar from '../BottomBar/BottomBar.jsx';
 
 class Main extends React.Component {
   constructor(props) {
@@ -17,7 +18,10 @@ class Main extends React.Component {
   render() {
     let num = this.props.num;
     return (
-      <div onClick={()=>this.click()}>{num}</div>
+      <div>
+        <div onClick={()=>this.click()}>{num}</div>
+        <BottomBar/>
+      </div>
     );
   }
 }
