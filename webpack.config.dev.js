@@ -50,6 +50,9 @@ module.exports = {
     contentBase: devPath
   },
   entry: entryMap,
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
   output: {
     path: devPath,
     filename: '[name].min.js'
@@ -70,7 +73,12 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: ['style-loader', 'css-loader', 'sass-loader', {
+          loader: 'sass-resources-loader',
+          options: {
+            resources: srcRoot + '/component/common.scss'
+          }
+        }],
         include: srcRoot
       },
       {

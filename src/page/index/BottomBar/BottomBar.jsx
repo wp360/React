@@ -1,5 +1,7 @@
+import './BottomBar.scss';
 import React from 'react';
 import {connect} from 'react-redux';
+import {changeTab} from '../actions/tabAction';
 
 /**
  * @constructor <BottomBar>
@@ -10,13 +12,27 @@ class BottomBar extends React.Component {
   constructor(props) {
     super(props)
   }
+
+  changeTab(item) {
+    this.props.dispatch(changeTab({
+      activeKey: item.key
+    }));
+  }
+
   renderItems() {
-    let tabs = ['首页', '订单', '我的'];
+    let tabs = this.props.tabs;
     return tabs.map((item, index) => {
+      let cls = item.key + ' btn-item';
+      let name = item.name;
+
+      if(item.key === this.props.activeKey) {
+        cls += ' active';
+      }
+
       return (
-        <div className="btn-item" key={index}>
+        <div className={cls} key={index} onClick={()=>this.changeTab(item)}>
           <div className="tab-icon"></div>
-          <div className="btn-name">{item}</div>
+          <div className="btn-name">{name}</div>
         </div>
       )
     })
@@ -30,4 +46,7 @@ class BottomBar extends React.Component {
   }
 }
 
-export default connect(state => ({}))(BottomBar);
+export default connect(state => ({
+  tabs: state.tabReducer.tabs,
+  activeKey: state.tabReducer.activeKey
+}))(BottomBar);

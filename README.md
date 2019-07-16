@@ -109,6 +109,148 @@ devServer: {
 4. 运行命令
 `npm run dev`
 
+## 底部tab
+1. 新建文件 BottomBar.jsx、BottomBar.scss
+2. 首页入口文件导入底部tab组件
+3. index.html添加reset.scss文件
+```
+<link rel="stylesheet" href="./static/reset.css">
+```
+4. 新建img文件夹添加对应图片
+5. tabReducer里定义初始化数据
+```js
+const initState = {
+  tabs: [
+    {
+      name: '首页',
+      key: TABKEY.home
+    },
+    {
+      name: '订单',
+      key: TABKEY.order
+    },
+    {
+      name: '我的',
+      key: TABKEY.my
+    }
+  ],
+  activeKey: TABKEY.home
+};
+// BottomBar.jsx组件 =》 容器组件使用 connect() 方法连接 Redux
+export default connect(state => ({
+  tabs: state.tabReducer.tabs,
+  activeKey: state.tabReducer.activeKey
+}))(BottomBar);
+```
+6. redux设置
+```js
+// actionTypes.js
+export const CHANGE_TAB = 'CHANGE_TAB';
+// tabAction.js
+import {CHANGE_TAB} from './actionTypes';
+
+export const changeTab = (obj) => {
+  return {
+    type: CHANGE_TAB,
+    obj: obj
+  }
+}
+// tabReducer.js
+import { CHANGE_TAB } from '../actions/actionTypes';
+import {TABKEY} from '../config.js';
+
+const initState = {
+// ...省略
+};
+
+const changeTab = (state, action) => {
+  let activeKey = action.obj.activeKey;
+  return {...state, activeKey: activeKey};
+};
+
+const tabReducer = (state=initState,action) => {
+  switch(action.type) {
+    case CHANGE_TAB: return changeTab(state, action);
+    default: return state;
+  }
+}
+
+export default tabReducer;
+```
+7. tab组件页面
+```jsx
+  changeTab(item) {
+    this.props.dispatch(changeTab({
+      activeKey: item.key
+    }));
+  }
+
+  renderItems() {
+    let tabs = this.props.tabs;
+    return tabs.map((item, index) => {
+      let cls = item.key + ' btn-item';
+      let name = item.name;
+
+      if(item.key === this.props.activeKey) {
+        cls += ' active';
+      }
+
+      return (
+        <div className={cls} key={index} onClick={()=>this.changeTab(item)}>
+          <div className="tab-icon"></div>
+          <div className="btn-name">{name}</div>
+        </div>
+      )
+    })
+  }
+  render() {
+    return (
+      <div className="bottom-bar">
+        {this.renderItems()}
+      </div>
+    )
+  }
+```
+
+## 使用rem
+1. 新建rem.js [dev >> static >> rem.js]
+2. scss定义px to rem的转换function
+```
+@function px2rem($px) {
+  $rem: 37.5px;
+  @return ($px/$rem) + rem;
+}
+```
+3. 封装公共方法
+* component文件夹 》common.scss
+4. webpack引入common.scss
+* 安装依赖 `npm i sass-resources-loader --save`
+* 设置
+```js
+// webpack.config.dev.js
+      {
+        test: /\.scss$/,
+        use: [
+          // ...省略
+        , {
+          loader: 'sass-resources-loader',
+          options: {
+            resources: srcRoot + '/component/common.scss'
+          }
+        }],
+        include: srcRoot
+      },
+```
+5. VS code 安装插件Px to rem with scss
+6. 配置VS code插件
+```js
+// C:\Users\用户名\.vscode\extensions\medzhidov.px-to-rem-with-scss-1.0.3\out\src\extension.js
+text = text.replace(val, `rem(${parseInt(val)})`);
+// 改成
+text = text.replace(val, `px2rem(${parseInt(val)}px)`);
+```
+7. 重启VS code，选中px，按快捷键alt + c，完成切换。
+
 ## git上传
 ```
 git remote add origin https://github.com/wp360/React.git
