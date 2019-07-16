@@ -251,6 +251,67 @@ text = text.replace(val, `px2rem(${parseInt(val)}px)`);
 ```
 7. 重启VS code，选中px，按快捷键alt + c，完成切换。
 
+## eslint的使用
+1. 安装依赖
+`npm i eslint eslint-loader eslint-plugin-react --save`
+2. 设置webpack
+```js
+  module: {
+    rules: [
+      {
+        // ... 省略
+        {
+          loader: 'eslint-loader'
+        }],
+        include: srcRoot
+      },
+```
+3. 新建.eslintrc文件
+
+## webpack热更新
+1. 安装插件
+`npm i react-hot-loader --save`
+2. 设置webpack
+```js
+module.exports = {
+  mode: 'development',
+  devServer: {
+    // ...省略
+    hot: true
+  },
+  // ...省略
+    plugins: [
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ].concat(htmlArray)
+```
+3. 新建Container.jsx
+```jsx
+import React from 'react';
+
+import Main from './Main.jsx';
+import { hot } from 'react-hot-loader';
+
+
+class Container extends React.Component {
+    render() {
+        return <Main />
+    }
+}
+
+export default hot(module)(Container);
+```
+4. 修改index.js，引入Container.jsx替换Main.jsx
+5. store.js热更新判断
+```js
+if (module.hot) {
+  module.hot.accept('./reducers/main', () => {
+    const nextRootReducer = require('./reducers/main.js').default;
+    store.replaceReducer(nextRootReducer)
+  });
+}
+```
+
 ## git上传
 ```
 git remote add origin https://github.com/wp360/React.git

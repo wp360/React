@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
@@ -9,11 +10,11 @@ const mainFile = 'index.js';
 
 function getHtmlArray(entryMap) {
   let htmlArray = [];
-  Object.keys(entryMap).forEach((key)=>{
+  Object.keys(entryMap).forEach((key) => {
     let fullPathName = path.resolve(pageDir, key);
-    let fileName = path.resolve(fullPathName, key+'.html');
+    let fileName = path.resolve(fullPathName, key + '.html');
 
-    if(fs.existsSync(fileName)) {
+    if (fs.existsSync(fileName)) {
       htmlArray.push(new HtmlWebPackPlugin({
         filename: key + '.html',
         template: fileName,
@@ -34,7 +35,7 @@ function getEntry() {
     let stat = fs.statSync(fullPathName); // 判断路径还是文件
     let fileName = path.resolve(fullPathName, mainFile);
     // isDirectory 判断fullPathName是路径不是文件 并且存在这个文件，获取入口文件
-    if(stat.isDirectory() && fs.existsSync(fileName)) {
+    if (stat.isDirectory() && fs.existsSync(fileName)) {
       entryMap[pathname] = fileName;
     }
   });
@@ -47,7 +48,8 @@ const htmlArray = getHtmlArray(entryMap);
 module.exports = {
   mode: 'development',
   devServer: {
-    contentBase: devPath
+    contentBase: devPath,
+    hot: true
   },
   entry: entryMap,
   resolve: {
@@ -58,12 +60,15 @@ module.exports = {
     filename: '[name].min.js'
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.(js|jsx)$/,
         use: [{
-          loader: 'babel-loader'
-        }],
+            loader: 'babel-loader'
+          },
+          {
+            loader: 'eslint-loader'
+          }
+        ],
         include: srcRoot
       },
       {
@@ -90,5 +95,7 @@ module.exports = {
   },
   plugins: [
     // new HtmlWebPackPlugin()
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ].concat(htmlArray)
 }
