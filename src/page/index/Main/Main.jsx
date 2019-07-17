@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import BottomBar from '../BottomBar/BottomBar.jsx';
+import Home from '../Home/Home';
+import BottomBar from '../BottomBar/BottomBar';
 
 class Main extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class Main extends React.Component {
   render() {
     return (
       <div>
+        <Home/>
         <BottomBar/>
       </div>
     );

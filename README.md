@@ -312,6 +312,11 @@ if (module.hot) {
 }
 ```
 
+## Home首页
+1. 新建文件Home.jsx、Home.scss
+2. 头部文件Header.jsx、Header.scss
+3. 搜索框SearchBar.jsx、SearchBar.scss
+
 ## git上传
 ```
 git remote add origin https://github.com/wp360/React.git
