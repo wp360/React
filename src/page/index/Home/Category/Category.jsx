@@ -1,6 +1,5 @@
 import React from 'react';
 import './Category.scss';
-import axios from 'axios';
 import {connect} from 'react-redux';
 import {getHeaderData} from '../../actions/categoryAction';
 /**
@@ -15,24 +14,25 @@ class Category extends React.Component {
   }
 
   fetchData() {
-    axios({
-      method: 'get',
-      url: '/json/head.json'
-    }).then((resp)=>{
-      this.props.dispatch(getHeaderData(resp.data));
-    });
+    this.props.dispatch(getHeaderData());
   }
 
   renderItems() {
     let items = this.props.items;
+    items = items.splice(0,8);
     return items.map((item,index)=> {
-      return <div>{item.name}</div>
+      return (
+        <div key={index} className="category-item">
+          <img className="item-icon" src={item.url} />
+          <p className="item-name">{item.name}</p>
+        </div>
+      )
     });
   }
 
   render() {
     return (
-      <div className="categoey-content">
+      <div className="category-content clearfix">
         {this.renderItems()}
       </div>
     )
