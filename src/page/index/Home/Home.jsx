@@ -1,5 +1,7 @@
 import React from 'react';
-import Header from './Header/Header'
+import Header from './Header/Header';
+import Category from './Category/Category';
+
 /**
  * @constructor <Home />
  * @description 首页tab代码
@@ -14,6 +16,7 @@ class Home extends React.Component {
     return (
       <div>
         <Header/>
+        <Category/>
       </div>
     )
   }
