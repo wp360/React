@@ -317,6 +317,77 @@ if (module.hot) {
 2. 头部文件Header.jsx、Header.scss
 3. 搜索框SearchBar.jsx、SearchBar.scss
 
+## 首页附近商家列表
+1. 新建文件夹ContentList，再新建ContentList.jsx、ContentList.scss
+2. actionTypes.js添加参数
+```js
+export const LIST_DATA = 'LIST_DATA';
+```
+3. 新建contentListAction.js
+```js
+import {LIST_DATA} from './actionTypes';
+import axios from 'axios';
+
+export const getListData = () => (dispatch) => {
+  axios({
+    method: 'get',
+    url: '/json/homelist.json'
+  }).then((resp) => {
+    dispatch({
+      type: LIST_DATA,
+      obj: resp.data
+    })
+  });
+}
+```
+4. 新建contentListReducer.js
+```js
+import {LIST_DATA} from '../actions/actionTypes';
+
+const initState = {
+  list: []
+};
+
+const getListData = (state,action) => {
+  return {...state, list: action.obj.data.poilist};
+}
+
+const contentListReducer = (state=initState,action) => {
+  switch(action.type) {
+    case LIST_DATA: return getListData(state, action);
+    default: return state;
+  }
+}
+
+export default contentListReducer;
+```
+6. reducers/main.js添加contentListReducer.js
+```js
+// ...省略
+import contentListReducer from './contentListReducer.js';
+import {combineReducers} from 'redux';
+
+const reducers = combineReducers({
+  // ...省略
+  contentListReducer
+});
+
+export default reducers;
+```
+7. ContentList组件页面制作，数据绑定
+8. Home.jsx添加ContentList组件
+```js
+import ContentList from './Category/ContentList/ContentList';
+
+class Home extends React.Component {
+  // ...省略
+  render() {
+    return (
+        // ...省略
+        <ContentList/>
+    )
+```
+
 ## git上传
 ```
 git remote add origin https://github.com/wp360/React.git
