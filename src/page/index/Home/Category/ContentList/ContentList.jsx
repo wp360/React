@@ -1,6 +1,7 @@
 import React from 'react';
 import './ContentList.scss';
 import {connect} from 'react-redux';
+import ListItem from './ListItem/ListItem.jsx';
 import {getListData} from '../../../actions/contentListAction';
 /**
  * @constructor <ContentList />
@@ -14,16 +15,16 @@ class ContentList extends React.Component {
   }
 
   fetchData() {
-    this.props.dispatch(getListData());
+    this
+      .props
+      .dispatch(getListData());
   }
 
   renderItems() {
     let list = this.props.list;
     return list.map((item, index) => {
       return (
-        <div key={index} className="list-item">
-          <p className="item-name">{item.name}</p>
-        </div>
+        <ListItem key={index} itemData={item}></ListItem>
       )
     });
   }
