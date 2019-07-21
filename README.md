@@ -390,6 +390,115 @@ class Home extends React.Component {
 
 ## 滚动加载
 > scrollTop + clientHeight >= scrollHeight
+1. 通过react生命周期监听滚动事件判断页面滚动
+```jsx
+  onLoadPage() {
+    let clientHeight = document.documentElement.clientHeight;
+    let scrollHeight = document.body.scrollHeight;
+    let scrollTop = document.documentElement.scrollTop;
+    let proLoadDis = 30;
+
+    if ((scrollTop + clientHeight) >= (scrollHeight - proLoadDis)) {
+      console.log(1);
+    }
+  }
+
+  // 旧版本 componentWillMount
+  UNSAFE_componentWillMount () {
+    window.addEventListener('scroll', this.onLoadPage.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onLoadPage.bind(this));
+  }
+```
+2. 页面滚动，加载数据
+```jsx
+  constructor(props) {
+    super(props);
+    // 页面滚动初始值
+    this.state = {
+      isend: false,
+      loadingText: '加载中'
+    };
+    // 请求第一屏数据
+    this.fetchData(this.page);
+    // 记录当前页码
+    this.page = 0;
+  }
+
+  onLoadPage() {
+    // ...省略
+
+    if ((scrollTop + clientHeight) >= (scrollHeight - proLoadDis)) {
+      // console.log(1);
+      this.page ++;
+      // 最多滚动3页
+      if(this.page > 3) {
+        this.setState({
+          isend: true,
+          loadingText: '已完成'
+        });
+      } else {
+        this.fetchData(this.page);
+      }
+    }
+  }
+
+  fetchData(page) {
+    this.props.dispatch(getListData(page));
+  }
+
+  // getListData(page)连接redux
+  // contentListAction.js
+  export const getListData = (page) => (dispatch) => {
+    axios({
+        // ...省略
+    }).then((resp) => {
+      dispatch({
+        // ...省略
+        currentPage: page
+      })
+    });
+  }
+  // contentListReducer.js
+  const getListData = (state,action) => {
+    if(action.page === 0) {
+      return {...state, list: action.obj.data.poilist};
+    } else {
+      let list = state.list;
+      return {...state, list: list.concat(action.obj.data.poilist)};
+    }
+  }
+  // loadingText判断加载完成的文字显示
+  render() {
+    return (
+      <div className="list-content">
+        <!-- 省略 -->
+        <div className="loading">{this.state.loadingText}</div>
+      </div>
+    )
+  }
+```
+3. 样式添加
+
+## 提取加载公共组件
+1. component文件夹下新建Loading》Loading.jsx、Loading.scss
+2. 修改webpack.config.dev.js设置，添加component根目录
+3. 页面引入组件，删除多余初始参数
+```jsx
+import Loading from 'component/Loading/Loading.jsx';
+// ...省略
+  render() {
+    return (
+      <div className="list-content">
+        <!-- 省略 -->
+        <Loading isend={this.state.isend} />
+      </div>
+    )
+  }
+```
+
 
 ## git上传
 ```

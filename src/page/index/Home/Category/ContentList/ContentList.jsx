@@ -3,6 +3,7 @@ import './ContentList.scss';
 import {connect} from 'react-redux';
 import ListItem from './ListItem/ListItem.jsx';
 import {getListData} from '../../../actions/contentListAction';
+import Loading from 'component/Loading/Loading.jsx';
 /**
  * @constructor <ContentList />
  * @description 附近商家列表
@@ -13,8 +14,7 @@ class ContentList extends React.Component {
     super(props);
     // 页面滚动初始值
     this.state = {
-      isend: false,
-      loadingText: '加载中'
+      isend: false
     };
     // 请求第一屏数据
     this.fetchData(this.page);
@@ -35,8 +35,7 @@ class ContentList extends React.Component {
       // 最多滚动3页
       if(this.page > 3) {
         this.setState({
-          isend: true,
-          loadingText: '已完成'
+          isend: true
         });
       } else {
         this.fetchData(this.page);
@@ -75,7 +74,7 @@ class ContentList extends React.Component {
           <span className="title-line"></span>
         </h4>
         {this.renderItems()}
-        <div className="loading">{this.state.loadingText}</div>
+        <Loading isend={this.state.isend} />
       </div>
     )
   }
