@@ -14,6 +14,26 @@ class ContentList extends React.Component {
     this.fetchData();
   }
 
+  onLoadPage() {
+    let clientHeight = document.documentElement.clientHeight;
+    let scrollHeight = document.body.scrollHeight;
+    let scrollTop = document.documentElement.scrollTop;
+    let proLoadDis = 30;
+
+    if ((scrollTop + clientHeight) >= (scrollHeight - proLoadDis)) {
+      console.log(1);
+    }
+  }
+
+  // 旧版本 componentWillMount
+  UNSAFE_componentWillMount () {
+    window.addEventListener('scroll', this.onLoadPage.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onLoadPage.bind(this));
+  }
+
   fetchData() {
     this
       .props
