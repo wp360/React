@@ -1,7 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 // import Home from '../Home/Home';
-import Order from '../Order/Order';
+// import Order from '../Order/Order';
+import My from '../MY/My';
 import BottomBar from '../BottomBar/BottomBar';
 
 class Main extends React.Component {
@@ -11,9 +12,9 @@ class Main extends React.Component {
 
   render() {
     return (
-      /* <Home /> */
+      /* <Home /><Order /> */
       <div>
-        <Order />
+        <My/>
         <BottomBar/>
       </div>
     );

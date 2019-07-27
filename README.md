@@ -565,6 +565,9 @@ render() {
 #### 订单列表单个组件
 > 参照首页商家列表制作
 
+## 我的
+> 参照设计稿制作页面
+
 ## git上传
 ```
 git remote add origin https://github.com/wp360/React.git
