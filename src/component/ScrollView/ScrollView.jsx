@@ -1,3 +1,4 @@
+import './ScrollView.scss';
 import React from 'react';
 import Loading from 'component/Loading/Loading';
 /**
