@@ -16,7 +16,7 @@ const initState = {
       key: TABKEY.my
     }
   ],
-  activeKey: TABKEY.my
+  activeKey: TABKEY.home
 };
 
 const changeTab = (state, action) => {

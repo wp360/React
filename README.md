@@ -568,6 +568,135 @@ render() {
 ## 我的
 > 参照设计稿制作页面
 
+## 路由
+1. 安装依赖
+`npm i react-router-dom react-router-redux --save`
+
+[react-router参考网站：https://reacttraining.com/react-router/](https://reacttraining.com/react-router/)
+[react-router-redux参考网址：https://github.com/ReactTraining/react-router/tree/5345a820818c8d43ac923558670538a479ac2234/packages/react-router-redux](https://github.com/ReactTraining/react-router/tree/5345a820818c8d43ac923558670538a479ac2234/packages/react-router-redux)
+
+2. 引入依赖
+```js
+// index/index.js
+// ...省略
+import { ConnectedRouter } from 'react-router-redux';
+
+ReactDom.render(
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
+            <Container />
+        </ConnectedRouter>
+        </Provider>,
+    document.getElementById('root')
+);
+```
+
+3. store.js添加history
+```js
+// import createHistory from 'history/createHashHistory';
+import {createHashHistory} from 'history';
+import {routerMiddleware} from 'react-router-redux';
+// 创建基于hash的history
+const history = createHashHistory();
+// 创建初始化tab
+history.replace('home');
+// 创建history的Middleware
+const historyMiddl = routerMiddleware(history);
+const store = createStore(mainReducer, applyMiddleware(thunk, historyMiddl));
+// ...省略
+module.exports = {store,history}
+```
+
+4. main.js添加reducer
+```js
+// index/reducers/main.js
+// 省略
+import {routerReducer} from 'react-router-redux';
+
+const reducers = combineReducers({
+  // ...省略
+  router: routerReducer
+});
+
+export default reducers;
+```
+
+5. 页面添加路由
+```jsx
+// Main.jsx
+import {Route, withRouter} from 'react-router-dom';
+// ...省略
+  render() {
+    return (
+      <div>
+        <Route exact path="/home" component={Home}/>
+        <Route path="/order" component={Order}/>
+        <Route path="/my" component={My}/>
+        <BottomBar/>
+      </div>
+    );
+  }
+// ...省略
+export default withRouter(connect()(Main));
+```
+
+6. 底部BottomBar调整
+```jsx
+// BottomBar.jsx
+// ...省略
+// import {changeTab} from '../actions/tabAction';
+// ...省略
+  changeTab(item) {
+    this.props.history.replace(item.key);
+    // this.props.dispatch(changeTab({
+    //   activeKey: item.key
+    // }));
+  }
+
+  return (
+    <NavLink className={cls} replace={true} to={"/" + item.key} activeClassName="active" key={index} onClick={()=>this.changeTab(item)}>
+      <div className="tab-icon"></div>
+      <div className="btn-name">{name}</div>
+    </NavLink>
+  )
+// ...省略
+export default withRouter(connect(state => ({
+  tabs: state.tabReducer.tabs,
+  activeKey: state.tabReducer.activeKey
+}))(BottomBar));
+```
+
+## history报错
+> warnAboutDeprecatedCJSRequire.js:17 Warning: Please use `require("history").createHashHistory` instead of `require("history/createHashHistory")`. Support for the latter will be removed in the next major release.
+```js
+import {createHistory} from 'history/createHashHistory';
+// 创建基于hash的history
+const history = createHistory();
+// 改成
+import {createHashHistory} from 'history';
+// 创建基于hash的history
+const history = createHashHistory();
+```
+
+##react-router-redux使用报错
+```
+使用react-router4.
+
+npm install react-router-redux 
+
+安装的react-router-redux默认是到@4.0.8,当使用ConnectedRouter组件包裹app时，会报错说引入的不是组件/string(type is invalid).这是因为该版本不能和react-router4协作
+
+见：
+
+https://github.com/ReactTraining/react-router/issues/4769
+
+https://github.com/ReactTraining/react-router/issues/4694
+
+solution:
+
+npm install react-router-redux@next 安装5.0.0-alpha.x
+```
+
 ## git上传
 ```
 git remote add origin https://github.com/wp360/React.git
