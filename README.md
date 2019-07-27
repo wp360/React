@@ -499,6 +499,68 @@ import Loading from 'component/Loading/Loading.jsx';
   }
 ```
 
+## 订单页面
+#### 提取公共组件ScrollView
+1. 新建ScrollView文件夹 》ScrollView.jsx、ScrollView.scss
+2. ScrollView.jsx，提取出onLoadPage()方法及添加Loading组件
+```jsx
+import React from 'react';
+import Loading from 'component/Loading/Loading';
+/**
+ * <ScrollView loadCallback={function} isend={bool}/>
+ * @description 滚动加载组件
+ */
+
+class ScrollView extends React.Component {
+  onLoadPage() {
+    let clientHeight = document.documentElement.clientHeight;
+    let scrollHeight = document.body.scrollHeight;
+    let scrollTop = document.documentElement.scrollTop;
+    let proLoadDis = 30;
+
+    if ((scrollTop + clientHeight) >= (scrollHeight - proLoadDis)) {
+      if(!this.props.isend) {
+        this.props.loadCallback && this.props.loadCallback();
+      }
+    }
+  }
+
+  // 旧版本 componentWillMount
+  UNSAFE_componentWillMount() {
+    window.addEventListener('scroll', this.onLoadPage.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onLoadPage.bind(this));
+  }
+
+  render() {
+    return (
+      <div className="scrollview">
+        {this.props.children}
+        <Loading isend={this.props.isend}/>
+      </div>
+    );
+  }
+}
+
+export default ScrollView;
+```
+3. 相关内容列表页面引入及参数添加
+```jsx
+import ScrollView from 'component/ScrollView/ScrollView';
+
+render() {
+  return (
+    <div className="list-content">
+      <!-- 省略 -->
+      <ScrollView loadCallback={this.onLoadPage.bind(this)} isend={this.state.isend}>
+        {this.renderItems()}
+      </ScrollView>
+    </div>
+  )
+}
+```
 
 ## git上传
 ```

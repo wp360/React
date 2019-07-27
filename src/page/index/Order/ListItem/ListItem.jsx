@@ -56,11 +56,19 @@ class ListItem extends React.Component {
     if (evaluation) {
       return (
         <div className="evaluation clearfix">
-          <div className="evaluation-btn">评价</div>
+          <div className="evaluation-btn" onClick={this.goEval}>评价</div>
         </div>
       );
     }
     return null;
+  }
+
+  goEval() {
+    window.location.href = './evaluation.html';
+  }
+
+  goDetail() {
+    window.location.href = './detail.html';
   }
 
   render() {
@@ -70,7 +78,7 @@ class ListItem extends React.Component {
         <div className="order-item-inner">
           <img className="item-img" src={data.poi_pic}/>
           <div className="item-right">
-            <div className="item-top">
+            <div className="item-top" onClick={this.goDetail}>
               <p className="order-name one-line">{data.poi_name}</p>
               <div className="arrow"></div>
               <div className="order-state">{data.status_description}</div>
