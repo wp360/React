@@ -545,6 +545,16 @@ class ScrollView extends React.Component {
 }
 
 export default ScrollView;
+
+// main.js
+import headerReducer from './headerReducer';
+import {combineReducers} from 'redux';
+
+const reducers = combineReducers({
+  headerReducer
+});
+
+export default reducers;
 ```
 3. 相关内容列表页面引入及参数添加
 ```jsx
@@ -696,6 +706,143 @@ solution:
 
 npm install react-router-redux@next 安装5.0.0-alpha.x
 ```
+
+## 分类页面
+1. 新建文件
+> 目录结构
+```
++-- page
+|   +-- category // 分类
+|   |   +-- actions
+|   |   +-- Header
+|   |   +-- Main
+|   |   +-- reducers
+|   +-- category.html
+|   +-- config.js
+|   +-- index.js
+|   +-- store.js
+```
+2. 公共组件NavHeader
+3. Main
+* Container.jsx
+* Main.jsx
+* Main.scss
+4. Header
+* Header.jsx
+* Header.scss
+5. config.js
+```js
+// TABKEY
+module.exports = {
+  TABKEY: {
+    cate: 'cate',
+    type: 'type',
+    filter: 'filter'
+  }
+}
+```
+6. reducers
+```js
+// headerReducer.js
+import {TABKEY} from '../config.js';
+let tabs = {};
+tabs[TABKEY.cate] = {
+  key: TABKEY.cate,
+  text: '全部分类',
+  obj: {}
+}
+tabs[TABKEY.type] = {
+  key: TABKEY.type,
+  text: '综合排序',
+  obj: {}
+}
+tabs[TABKEY.filter] = {
+  key: TABKEY.filter,
+  text: '筛选',
+  obj: {}
+}
+const initState = {
+  tabs: tabs,
+  activeKey: TABKEY.cate
+};
+
+const headerReducer = (state=initState,action) => {
+  switch(action.type) {
+    default: return state;
+  }
+}
+
+export default headerReducer;
+```
+7. actions
+```js
+// actionTypes.js
+export const CHANGE_TAB = 'CHANGE_TAB';
+// headerAction.js
+import {CHANGE_TAB} from './actionTypes';
+
+export const changeTab = (obj) => (dispatch) => {
+  dispatch({
+    type: CHANGE_TAB,
+    obj: obj
+  });
+}
+```
+8. changeTab效果添加
+```js
+// headerReducer.js
+const changeTab = (state, action) => {
+  return {...state, activekey: action.obj.activekey};
+}
+
+const headerReducer = (state=initState,action) => {
+  switch(action.type) {
+    case CHANGE_TAB: return changeTab(state, action);
+    default: return state;
+  }
+}
+```
+```jsx
+// Header.jsx
+import {changeTab} from '../actions/headerAction';
+// ...省略
+  changeTab(key) {
+    this.props.dispatch(changeTab({
+      activeKey: key
+    }));
+  }
+// ...省略
+  renderTabs() {
+      // ...省略
+      array.push(
+        <div className={cls} key={item.key} onClick={()=>this.changeTab(item.key)}>
+          {item.text}
+        </div>
+      );
+    }
+    return array;
+  }
+```
+9. store.js
+```js
+// 注意：中间件的使用
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
+import mainReducer from './reducers/main.js';
+
+const store = createStore(mainReducer, applyMiddleware(thunk, logger));
+
+export default store;
+```
+
+
+## 关于Redux
+* a. 需要回调通知state (等同于回调参数) -> action
+* b. 需要根据回调处理 (等同于父级方法) -> reducer
+* c. 需要state (等同于总状态) -> store
+> action: 指全局发布的动作指令，主要就是定义所有事件行为的
+> reducer: action指令发起会触发reducer对应函数执行
 
 ## git上传
 ```
