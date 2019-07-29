@@ -835,7 +835,79 @@ const store = createStore(mainReducer, applyMiddleware(thunk, logger));
 
 export default store;
 ```
+10. 使用async、await
+* 安装 `npm i babel-plugin-transform-async-to-generator babel-plugin-transform-runtime --save`
+* 设置.babel
+```json
+{
+ //省略
+  "plugins": [
+    ["transform-runtime", {
+      "helpers": false,
+      "polyfill": false,
+      "regenerator": true,
+      "moduleName": "babel-runtime"
+    }]
+  ]
+}
+```
+11. 获取数据
+```js
+// actionTypes.js
+export const GET_FILTER_DATA = 'GET_FILTER_DATA';
 
+// headerAction.js
+import {CHANGE_TAB, GET_FILTER_DATA} from './actionTypes';
+import axios from 'axios';
+
+// ...省略
+
+export const getFilterData = () => async (dispatch) => {
+  let resp = await axios({
+    url: './json/filter.json',
+    method: 'get'
+  });
+
+  dispatch({
+    type: GET_FILTER_DATA,
+    obj: resp.data
+  });
+}
+
+// headerReducer.js
+import {CHANGE_TAB, GET_FILTER_DATA} from '../actions/actionTypes';
+
+const getFilterData = (state, action) => {
+  return {...state, filterData: action.obj.data};
+}
+
+const headerReducer = (state=initState,action) => {
+  switch(action.type) {
+    // ... 省略
+    case GET_FILTER_DATA: return getFilterData(state, action);
+  }
+}
+
+```
+```jsx
+// Header.jsx
+import {changeTab, getFilterData} from '../actions/headerAction';
+
+/**
+ * @constructor <Header />
+ * @description 头部筛选
+ */
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.fentchData();
+  }
+
+  fentchData() {
+    this.props.dispatch(getFilterData());
+  }
+
+```
 
 ## 关于Redux
 * a. 需要回调通知state (等同于回调参数) -> action

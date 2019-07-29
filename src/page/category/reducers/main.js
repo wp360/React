@@ -1,10 +1,12 @@
-// import scrollViewReducer from 'component/ScrollView/scrollViewReducer';
 import headerReducer from './headerReducer';
+import contentListReducer from './contentListReducer.js';
+import scrollViewReducer from 'component/ScrollView/scrollViewReducer';
 import {combineReducers} from 'redux';
 
 const reducers = combineReducers({
-  headerReducer
-  // scrollViewReducer
+  headerReducer,
+  contentListReducer,
+  scrollViewReducer
 });
 
 export default reducers;
