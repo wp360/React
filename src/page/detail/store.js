@@ -1,8 +1,36 @@
-import {createStore, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+import {
+  createStore,
+  applyMiddleware
+} from 'redux';
+
 import mainReducer from './reducers/main.js';
 
-const store = createStore(mainReducer, applyMiddleware(thunk, logger));
+import thunk from 'redux-thunk';
 
-export default store;
+// import createHistory from 'history/createHashHistory';
+import {createHashHistory} from 'history';
+
+import {routerMiddleware} from 'react-router-redux';
+
+// 创建基于hash的history
+const history = createHashHistory();
+
+// 创建初始化tab
+history.replace('home');
+
+// 创建history的Middleware
+const historyMiddl = routerMiddleware(history);
+
+const store = createStore(mainReducer, applyMiddleware(thunk, historyMiddl));
+
+
+if (module.hot) {
+  module.hot.accept('./reducers/main', () => {
+    const nextRootReducer = require('./reducers/main.js').default;
+    store.replaceReducer(nextRootReducer)
+  });
+}
+module.exports = {
+  store,
+  history
+}
