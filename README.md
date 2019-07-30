@@ -916,6 +916,22 @@ class Header extends React.Component {
 > action: 指全局发布的动作指令，主要就是定义所有事件行为的
 > reducer: action指令发起会触发reducer对应函数执行
 
+## 商家详情页
+1. 新建文件
+> 目录结构
+```
++-- page
+|   +-- detail // 详情
+|   |   +-- actions
+|   |   +-- Header
+|   |   +-- Main
+|   |   +-- reducers
+|   +-- detail.html
+|   +-- config.js
+|   +-- index.js
+|   +-- store.js
+```
+
 ## git上传
 ```
 git remote add origin https://github.com/wp360/React.git
