@@ -16,7 +16,7 @@ import {routerMiddleware} from 'react-router-redux';
 const history = createHashHistory();
 
 // 创建初始化tab
-history.replace('home');
+history.replace('menu');
 
 // 创建history的Middleware
 const historyMiddl = routerMiddleware(history);
