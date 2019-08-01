@@ -917,21 +917,66 @@ class Header extends React.Component {
 > reducer: action指令发起会触发reducer对应函数执行
 
 ## 商家详情页
-1. 新建文件
-> 目录结构
-```
-+-- page
-|   +-- detail // 详情
-|   |   +-- actions
-|   |   +-- Header
-|   |   +-- Main
-|   |   +-- reducers
-|   +-- detail.html
-|   +-- config.js
-|   +-- index.js
-|   +-- store.js
-```
+1. 目录结构
++-- src
+|   +-- component  // 公共组件
+|   +-- page // 页面
+|   |   +-- detail    // 详情
+|   |   |   +-- actions
+|   |   |   |   +-- actionTypes.js
+|   |   |   |   +-- menuAction.js
+|   |   |   +-- Main
+|   |   |   |   +-- Container.jsx
+|   |   |   |   +-- Main.jsx
+|   |   |   |   +-- Main.scss
+|   |   |   +-- reducers
+|   |   |   |   +-- main.js
+|   |   |   |   +-- menuReducer.js
+|   |   |   |   +-- tabReducer.js
+|   |   |   +--config.js
+|   |   |   +--detail.html
+|   |   |   +--index.js
+|   |   |   +--store.js
+2. 页面初始化
+> detail.html >> index.js >> Container.jsx >> Main.jsx (Main.scss) >> store.js
+3. tab切换
+4. 菜单页面
+> Menu.jsx (Menu.scss)
+5. actions
+6. reducers
+7. store.js
+8. 同理构建其他tab页面
 
+#### 注释
+1. 模块热替换
+```js
+if (module.hot) {
+  module.hot.accept('./library.js', function() {
+    // 使用更新过的 library 模块执行某些操作...
+  });
+}
+```
+2. 模块api：accept
+> 接受(accept)给定依赖模块(dependencies)的更新，并触发一个 回调函数 来对这些更新做出响应。
+```js
+module.hot.accept(
+  dependencies, // 可以是一个字符串或字符串数组
+  callback // 用于在模块更新后触发的函数
+);
+```
+3. Store
+> Store 是应用状态 state 的管理者，包含下列四个函数：
+```
+Store.getState() // 获取整个 state 树
+Store.dispatch(action) // 触发 state 改变的【唯一途径】
+Store.subscribe(listener) // 可以理解为 DOM 中的 addEventListener
+Store.replaceReducer(nextReducer) // 一般在 Webpack 按需加载时用到
+```
+> Store 与 state 的关系：
+```
+const store = createStore(reducer, initialState)
+const state = store.getState()
+```
 ## git上传
 ```
 git remote add origin https://github.com/wp360/React.git
