@@ -115,21 +115,36 @@ module.exports = function(webpackEnv) {
         },
       },
     ].filter(Boolean);
+    // if (preProcessor) {
+    //   loaders.push(
+    //     {
+    //       loader: require.resolve('resolve-url-loader'),
+    //       options: {
+    //         sourceMap: isEnvProduction && shouldUseSourceMap,
+    //       },
+    //     },
+    //     {
+    //       loader: require.resolve(preProcessor),
+    //       options: {
+    //         sourceMap: true,
+    //       },
+    //     }
+    //   );
+    // }
     if (preProcessor) {
-      loaders.push(
-        {
-          loader: require.resolve('resolve-url-loader'),
+      let loader = require.resolve(preProcessor)
+      if (preProcessor === "less-loader") {
+        loader = {
+          loader,
           options: {
-            sourceMap: isEnvProduction && shouldUseSourceMap,
-          },
-        },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
-          },
+            modifyVars: { //自定义主题
+              'primary-color': '#f9c700',
+            },
+            javascriptEnabled: true,
+          }
         }
-      );
+      }
+      loaders.push(loader);
     }
     return loaders;
   };
@@ -328,8 +343,7 @@ module.exports = function(webpackEnv) {
               options: {
                 formatter: require.resolve('react-dev-utils/eslintFormatter'),
                 eslintPath: require.resolve('eslint'),
-                resolvePluginsRelativeTo: __dirname,
-
+                resolvePluginsRelativeTo: __dirname
               },
               loader: require.resolve('eslint-loader'),
             },
@@ -467,7 +481,7 @@ module.exports = function(webpackEnv) {
                   importLoaders: 2,
                   sourceMap: isEnvProduction && shouldUseSourceMap,
                   modules: true,
-                  getLocalIdent: getCSSModuleLocalIdent,
+                  getLocalIdent: getCSSModuleLocalIdent
                 },
                 'less-loader'
               ),

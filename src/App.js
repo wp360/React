@@ -1,7 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import './App.less';
+import React from 'react'
+import logo from './logo.svg'
+import {Button} from 'antd'
+import './App.css'
+import './App.less'
+// import 'antd/dist/antd.css'
 
 function App() {
   return (
@@ -11,6 +13,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        <Button>Antd按钮</Button>
         <a
           className="App-link"
           href="https://reactjs.org"

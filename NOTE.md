@@ -13,7 +13,13 @@
 `yarn add react-router-dom axios less-loader`
 5. 暴露配置
 `yarn eject`
+6. webpack配置less
+7. 安装antd
+`yarn add antd`
+8. 按需加载
+`yarn add babel-plugin-import`
 
+[react暴露后，webpack4.19.1实现按需加载antd](https://juejin.im/post/5c3964986fb9a049b41cb040)
 
 ## github上传
 ```
