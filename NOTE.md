@@ -75,6 +75,9 @@ export default class NavLeft extends React.Component {
 
 ```
 
+## React v16.9 新特性
+[React 新特性 —— https://blog.csdn.net/lunahaijiao/article/details/99619460](https://blog.csdn.net/lunahaijiao/article/details/99619460)
+
 ## github上传
 ```
 git remote add origin https://github.com/wp360/React.git
