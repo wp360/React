@@ -33,7 +33,8 @@ import './index.less';
 const { SubMenu } = Menu;
 
 export default class NavLeft extends React.Component {
-  componentWillMount() {
+  // componentWillMount
+  UNSAFE_componentWillMount() {
     const menuTreeNode = this.renderMenu(MenuConfig);
     this.setState({
       menuTreeNode
@@ -74,8 +75,78 @@ export default class NavLeft extends React.Component {
 }
 
 ```
+11. 添加系统时间
+12. 调用百度天气API
+```
+百度天气API接口
+http://api.map.baidu.com/telematics/v3/weather?location=beijing&output=json&ak=3p49MVra6urFRGOT9s8UBWr2
+参考文档： https://blog.csdn.net/younghaiqing/article/details/54799303
+```
+13. 跨域jsonp的使用
+`yarn add jsonp --save`
+14. axios封装
+```js
+// axios >> index.js
+import JsonP from 'jsonp';
+
+export default class Axios {
+  static jsonp(options) {
+    return new Promise((resolve,reject) => {
+      JsonP(options.url, {
+        params: 'callback'
+      }, function(err,response) {
+        // to-do
+        if(response.status === 'success') {
+          resolve(response);
+        } else {
+          reject(response.message);
+        }
+      })
+    })
+  }
+}
+
+```
+15. 页面天气接口调用
+```js
+// Header >> index.js
+// 省略
+import axios from '../../axios';
+export default class Header extends React.Component {
+    // 省略
+    // 调用天气api
+    this.getWeatherAPIData()
+  }
+
+  getWeatherAPIData(){
+    let city = 'shanghai'
+    // 中文的话需要编码 encodeURIComponent(city)
+    axios.jsonp({
+      url: 'http://api.map.baidu.com/telematics/v3/weather?location='+ city +'&output=json&ak=3p49MVra6urFRGOT9s8UBWr2'
+    }).then((res)=> {
+      if(res.status === 'success') {
+        let data = res.results[0].weather_data[0];
+        this.setState({
+          dayPictureUrl: data.dayPictureUrl,
+          weather: data.weather
+        })
+      }
+    })
+  }
+
+// 天气内容
+<span className="weather-img">
+  <img src={this.state.dayPictureUrl} alt=""/>
+</span>
+<span className="weather-detail">
+  {this.state.weather}
+</span>
+
+```
+
 
 ## React v16.9 新特性
+`npx react-codemod rename-unsafe-lifecycles`
 [React 新特性 —— https://blog.csdn.net/lunahaijiao/article/details/99619460](https://blog.csdn.net/lunahaijiao/article/details/99619460)
 
 ## github上传
