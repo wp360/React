@@ -162,10 +162,117 @@ Switch
 ```
 2. 使用介绍
 3. 实战操作
+* 新建路由文件
+```js
+// src >> router.js
+import React from 'react'
+import {HashRouter, Route} from 'react-router-dom'
+import App from './App'
+import Login from './pages/login'
+import Admin from './admin'
+import Buttons from './pages/ui/buttons'
+
+export default class IRouter extends React.Component {
+  render() {
+    return(
+      <HashRouter>
+        <App>
+          <Route path="/login" component={Login} />
+          <Route path="/admin" render={()=>
+            <Admin>
+              <Route path="/admin/ui/buttons" component={Buttons} />
+            </Admin>
+          } />
+        </App>
+      </HashRouter>
+    );
+  }
+}
+
+```
+* 设置App外层组件
+```js
+// src >> App.js
+import React, {Component} from 'react'
+import './App.css'
+
+class App extends Component{
+  render() {
+    return (
+      <div>
+        {this.props.children}
+      </div>
+    );
+  }
+}
+
+export default App;
+
+```
+* 管理页面内容更新
+```js
+<Home/>
+换成
+{this.props.children}
+```
+* 添加对应子路由及组件
+```js
+import Login from './pages/login'
+import Buttons from './pages/ui/buttons'
+```
+* 左侧导航组件路由调整
+```js
+// src >> components >> NavLeft >> index.js
+import { NavLink } from 'react-router-dom'
+// 省略
+  // 菜单渲染
+  renderMenu=(data)=>{
+    return data.map((item)=>{
+      if(item.children) {
+        return (
+          <SubMenu title={item.title} key={item.key}>
+            {this.renderMenu(item.children)}
+          </SubMenu>
+        )
+      }
+      return (
+        <Menu.Item title={item.title} key={item.key}>
+          {item.title}
+        </Menu.Item>
+      )
+    })
+  }
+// 改成
+  renderMenu=(data)=>{
+    return data.map((item)=>{
+      // 省略
+      return (
+        <Menu.Item title={item.title} key={item.key}>
+          <NavLink to={item.key}>{item.title}</NavLink>
+        </Menu.Item>
+      )
+    })
+  }
+```
+* 添加404页面
+> nomatch >> index.js/index.less
+```js
+// src >> router.js
+import NoMatch from './pages/nomatch/index'
+// 省略
+  <Admin>
+    <Switch>
+      <Route path="/admin/ui/buttons" component={Buttons} />
+      <Route component={NoMatch} />
+    </Switch>
+  </Admin>
+```
 
 [React Router 中文文档](http://react-guide.github.io/react-router-cn/index.html)
 
 #### react-router 4.0 对于接受参数采用 { this.props.match.params.id }
+
+#### this.props.children，它表示组件的所有子节点
 
 ## React v16.9 新特性
 `npx react-codemod rename-unsafe-lifecycles`
