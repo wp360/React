@@ -5,8 +5,9 @@ export default class Main extends React.Component{
   render() {
     return(
       <div>
-        主页面
-        <Link to="/main/a">嵌套路由</Link>
+        主页面<br/>
+        <Link to="/main/123">嵌套路由1</Link><br/>
+        <Link to="/main/456">嵌套路由2</Link>
         <hr />
         {this.props.children}
       </div>

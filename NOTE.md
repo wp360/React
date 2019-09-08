@@ -165,6 +165,8 @@ Switch
 
 [React Router 中文文档](http://react-guide.github.io/react-router-cn/index.html)
 
+#### react-router 4.0 对于接受参数采用 { this.props.match.params.id }
+
 ## React v16.9 新特性
 `npx react-codemod rename-unsafe-lifecycles`
 [React 新特性 —— https://blog.csdn.net/lunahaijiao/article/details/99619460](https://blog.csdn.net/lunahaijiao/article/details/99619460)
