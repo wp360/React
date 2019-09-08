@@ -148,6 +148,22 @@ export default class Header extends React.Component {
 ## 首页
 * css3伪类箭头函数实现
 
+## React Router 4.0
+1. 基本概念
+* react-router
+* react-router-dom
+`npm install react-router-dom --save`
+* react-router-dom核心用法
+```
+HashRouter和BrowserRouter
+Route: path、exact、component、render
+NavLink、Link
+Switch
+```
+2. 使用介绍
+3. 实战操作
+
+[React Router 中文文档](http://react-guide.github.io/react-router-cn/index.html)
 
 ## React v16.9 新特性
 `npx react-codemod rename-unsafe-lifecycles`
