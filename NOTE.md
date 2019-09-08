@@ -274,6 +274,16 @@ import NoMatch from './pages/nomatch/index'
 
 #### this.props.children，它表示组件的所有子节点
 
+## Antd UI组件
+1. Button组件
+2. Modal组件
+3. Loading组件
+4. Notice组件
+5. Message组件
+6. Tab组件
+7. Gallery组件
+8. Carousel组件
+
 ## React v16.9 新特性
 `npx react-codemod rename-unsafe-lifecycles`
 [React 新特性 —— https://blog.csdn.net/lunahaijiao/article/details/99619460](https://blog.csdn.net/lunahaijiao/article/details/99619460)
