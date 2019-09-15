@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Button, Tabs, message, Icon} from 'antd'
+import {Card, Tabs, message, Icon} from 'antd'
 import './ui.less'
 const TabPane = Tabs.TabPane;
 export default class Buttons extends React.Component {
@@ -42,6 +42,7 @@ export default class Buttons extends React.Component {
     panes.push({title: activeKey, content: 'New Tab Pane', key: activeKey});
     this.setState({panes, activeKey});
   }
+
   remove = (targetKey) => {
     let activeKey = this.state.activeKey;
     let lastIndex;
