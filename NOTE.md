@@ -284,6 +284,20 @@ import NoMatch from './pages/nomatch/index'
 7. Gallery组件
 8. Carousel组件
 
+## moment的使用
+* 安装
+`yarn add moment --save`
+
+## Antd Form组件中Form.create()的方法
+> 经 Form.create() 包装过的组件会自带 this.props.form 属性
+```js
+class CustomizedForm extends React.Component {
+// ...代码
+}
+
+CustomizedForm = Form.create({})(CustomizedForm);
+```
+
 ## React v16.9 新特性
 `npx react-codemod rename-unsafe-lifecycles`
 [React 新特性 —— https://blog.csdn.net/lunahaijiao/article/details/99619460](https://blog.csdn.net/lunahaijiao/article/details/99619460)

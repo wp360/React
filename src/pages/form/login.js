@@ -71,7 +71,7 @@ class FormLogin extends React.Component{
                                     initialValue: true
                                 })(<Checkbox>记住密码</Checkbox>)
                             }
-                            <a className="login-form-forgot" href="" style={{float:'right'}}>忘记密码</a>
+                            <button className="login-form-forgot" style={{float:'right'}}>忘记密码</button>
                         </FormItem>
                         <FormItem>
                             <Button type="primary" onClick={this.handleSubmit}>登录</Button>
@@ -82,4 +82,5 @@ class FormLogin extends React.Component{
         );
     }
 }
+
 export default Form.create()(FormLogin);
