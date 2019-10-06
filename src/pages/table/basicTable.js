@@ -89,15 +89,41 @@ export default class BasicTable extends React.Component{
       },
       {
         title: '性别',
-        dataIndex: 'sex'
+        dataIndex: 'sex',
+        render(sex){
+          return sex === 1 ? '男' : '女'
+        }
       },
       {
         title: '状态',
-        dataIndex: 'state'
+        dataIndex: 'state',
+        render(state) {
+          let config = {
+            '1': '菜鸟',
+            '2': '初级',
+            '3': '中级',
+            '4': '高级',
+            '5': '专家'
+          }
+          return config[state]
+        }
       },
       {
         title: '爱好',
-        dataIndex: 'interest'
+        dataIndex: 'interest',
+        render(interest) {
+          let config = {
+            '1': '阅读',
+            '2': '影视',
+            '3': '动漫',
+            '4': '篮球',
+            '5': '游泳',
+            '6': '跑步',
+            '7': '画画',
+            '8': '唱歌'
+          }
+          return config[interest]
+        }
       },
       {
         title: '生日',
