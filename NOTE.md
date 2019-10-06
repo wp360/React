@@ -351,6 +351,50 @@ CustomizedForm = Form.create({})(CustomizedForm);
 
 [github：https://github.com/nuysoft/Mock/wiki/Getting-Started](https://github.com/nuysoft/Mock/wiki/Getting-Started)
 
+## loading加载
+1. 全局html内容添加
+```html
+<!-- public >> index.html -->
+<!-- loading加载 -->
+<div class="ajax-loading" id="ajaxLoading" style="display: none;">
+  <div class="overlay"></div>
+  <div class="loading">
+    <img src="https://media.number-7.cn/ebike-h5/static/images/common/loading.gif" alt="">
+    <span>加载中，请稍后...</span>
+  </div>
+</div>
+```
+2. 样式添加
+> src >> style >> loading.less
+3. 导入样式
+```less
+/*common.less*/
+@import './loading.less';
+```
+4. 添加使用
+```js
+// src >> axios >> index.js
+static ajax(options) {
+  let loading;
+  if (options.data && options.data.isShowLoading !== false) {
+    loading = document.getElementById('ajaxLoading')
+    loading.style.display = 'block'
+  }
+  let baseApi = 'https://www.easy-mock.com/mock/5d99a991896b9432186c1e7f/bikeapi'
+  return new Promise((resolve, reject) => {
+    axios({
+      // 省略
+    }).then((response) => {
+      if (options.data && options.data.isShowLoading !== false) {
+        loading = document.getElementById('ajaxLoading')
+        loading.style.display = 'none'
+      }
+      // 省略
+    })
+  })
+}
+```
+
 ## React v16.9 新特性
 `npx react-codemod rename-unsafe-lifecycles`
 [React 新特性 —— https://blog.csdn.net/lunahaijiao/article/details/99619460](https://blog.csdn.net/lunahaijiao/article/details/99619460)
