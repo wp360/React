@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card, Table} from 'antd'
+import {Card, Table, Modal} from 'antd'
 // import axios from 'axios'
 // 使用封装的axios
 import axios from './../../axios/index'
@@ -42,6 +42,7 @@ export default class BasicTable extends React.Component{
         time: '09:00'
       }
     ]
+    dataSource.map((item, index) => item.key = index)
     this.setState({
       dataSource
     })
@@ -70,10 +71,24 @@ export default class BasicTable extends React.Component{
       }
     }).then((res) => {
       if(res.code === 0) {
+        res.result.map((item,index) => item.key = index)
         this.setState({
           dynamicData: res.result
         })
       }
+    })
+  }
+
+  // 点击事件
+  onRowClick = (record, rowIndex) => {
+    let selectKey = [rowIndex]
+    Modal.info({
+      title: '信息',
+      content: `用户名：${record.userName}，用户爱好：${record.interest}`
+    })
+    this.setState({
+      selectedRowKeys: selectKey,
+      selectedItem: record
     })
   }
 
@@ -138,13 +153,31 @@ export default class BasicTable extends React.Component{
         dataIndex: 'time'
       }
     ]
+    // const {selectedRowKeys} = this.state;
+    const selectedRowKeys = this.state.selectedRowKeys;
+    const rowSelection = {
+      type: 'radio',
+      selectedRowKeys
+    }
     return (
       <div>
         <Card title="基础表格">
-          <Table bordered  dataSource={this.state.dataSource} columns={columns} pagination={false} />
+          <Table bordered dataSource={this.state.dataSource} columns={columns} pagination={false} />
         </Card>
         <Card title="动态数据渲染表格" style={{margin: '10px 0'}}>
-          <Table bordered  dataSource={this.state.dynamicData} columns={columns} pagination={false} />
+          <Table bordered dataSource={this.state.dynamicData} columns={columns} pagination={false} />
+        </Card>
+        <Card title="Mock-单选" style={{margin: '10px 0'}}>
+          <Table bordered rowSelection={rowSelection}
+          onRow={(record,rowIndex) => {
+              return {
+                onClick: event => {
+                  this.onRowClick(record, rowIndex)
+                }
+              }
+            }
+          }
+          dataSource={this.state.dynamicData} columns={columns} pagination={false} />
         </Card>
       </div>
     )
