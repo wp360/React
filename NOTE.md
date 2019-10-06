@@ -298,6 +298,59 @@ class CustomizedForm extends React.Component {
 CustomizedForm = Form.create({})(CustomizedForm);
 ```
 
+## Antd Table组件
+> 项目工程化 - Table动态渲染
+* 项目工程化 - Mock数据
+* 项目工程化 - Axios封装
+* 项目工程化 - Loading处理、错误拦截
+
+## Easy Mock
+
+[官网：https://www.easy-mock.com](https://www.easy-mock.com)
+
+* 新建个人项目（团队项目需要添加组员）
+> 点击加号 》 设置项目名称 》 项目基础 URL 》 项目描述 》 点击创建
+
+* 创建接口
+> 点击项目 》 点击+创建接口 》 Method(get)、URL(/table/list)、描述(动态表格渲染)
+```js
+// 数据
+{
+  "code": 0,
+  "msg": "",
+  "result|10": [{
+    id: '0',
+    userName: 'Bob',
+    sex: '1',
+    state: '1',
+    interest: '1',
+    birthday: '2000-01-01',
+    address: '上海市浦东新区',
+    time: '08:00'
+  }]
+}
+
+// 动态生成
+{
+  "code": 0,
+  "msg": "",
+  "result|10": [{
+    "id|+1": 0,
+    "userName": '@cname',
+    "sex|1-2": 1,
+    "state|1-5": 1,
+    "interest|1-8": 1,
+    birthday: '2000-01-01',
+    address: '上海市浦东新区',
+    time: '08:00'
+  }]
+}
+```
+
+## Mock.js(Mock规范)
+
+[github：https://github.com/nuysoft/Mock/wiki/Getting-Started](https://github.com/nuysoft/Mock/wiki/Getting-Started)
+
 ## React v16.9 新特性
 `npx react-codemod rename-unsafe-lifecycles`
 [React 新特性 —— https://blog.csdn.net/lunahaijiao/article/details/99619460](https://blog.csdn.net/lunahaijiao/article/details/99619460)

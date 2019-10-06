@@ -1,9 +1,12 @@
 import React from 'react'
 import {Card, Table} from 'antd'
+import axios from 'axios'
 
 export default class BasicTable extends React.Component{
   // 初始值
-  state = {};
+  state = {
+    dynamicData: []
+  };
   componentDidMount() {
     const dataSource = [
       {
@@ -40,7 +43,24 @@ export default class BasicTable extends React.Component{
     this.setState({
       dataSource
     })
+
+    // 调用请求
+    this.request()
   }
+
+  // 动态获取mock数据
+  request = () => {
+    let baseUrl = 'https://www.easy-mock.com/mock/5d99a991896b9432186c1e7f/bikeapi'
+    axios.get(baseUrl + '/table/list').then((res) => {
+      // console.log(JSON.stringify(res))
+      if(res.status === '200' && res.data.code === 0) {
+        this.setState({
+          dynamicData: res.data.result
+        })
+      }
+    })
+  }
+
   render() {
     const columns = [
       {
@@ -80,6 +100,9 @@ export default class BasicTable extends React.Component{
       <div>
         <Card title="基础表格">
           <Table bordered  dataSource={this.state.dataSource} columns={columns} pagination={false} />
+        </Card>
+        <Card title="动态数据渲染表格" style={{margin: '10px 0'}}>
+          <Table bordered  dataSource={this.state.dynamicData} columns={columns} pagination={false} />
         </Card>
       </div>
     )
