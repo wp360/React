@@ -1,6 +1,8 @@
 import React from 'react'
 import {Card, Table} from 'antd'
-import axios from 'axios'
+// import axios from 'axios'
+// 使用封装的axios
+import axios from './../../axios/index'
 
 export default class BasicTable extends React.Component{
   // 初始值
@@ -50,12 +52,26 @@ export default class BasicTable extends React.Component{
 
   // 动态获取mock数据
   request = () => {
-    let baseUrl = 'https://www.easy-mock.com/mock/5d99a991896b9432186c1e7f/bikeapi'
-    axios.get(baseUrl + '/table/list').then((res) => {
-      // console.log(JSON.stringify(res))
-      if(res.status === '200' && res.data.code === 0) {
+    // let baseUrl = 'https://www.easy-mock.com/mock/5d99a991896b9432186c1e7f/bikeapi'
+    // axios.get(baseUrl + '/table/list').then((res) => {
+    //   // console.log(JSON.stringify(res))
+    //   if(res.status === '200' && res.data.code === 0) {
+    //     this.setState({
+    //       dynamicData: res.data.result
+    //     })
+    //   }
+    // })
+    axios.ajax({
+      url: '/table/list',
+      data: {
+        params: {
+          page: 1
+        }
+      }
+    }).then((res) => {
+      if(res.code === 0) {
         this.setState({
-          dynamicData: res.data.result
+          dynamicData: res.result
         })
       }
     })
