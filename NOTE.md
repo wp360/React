@@ -487,3 +487,80 @@ const store = createStore(counter, compose(
 * 安装 npm install react-redux --save
 * 忘记subscribe，记住reducer，action和dispatch即可
 * react-redux提供Provider和connect两个接口来连接
+#### 具体使用
+* Provider组件在应用最外层，传入store即可，只用一次
+```js
+// index.js
+import { counter, addGun, reduceGun, addGunAsync } from './index.redux'
+
+function render () {
+  ReactDOM.render(<App store={store} addGun={addGun} reduceGun={reduceGun} addGunAsync={addGunAsync} />, document.getElementById('root'));
+}
+render()
+store.subscribe(render)
+// 改为
+import {Provider} from 'react-redux'
+import { counter } from './index.redux'
+
+// ReactDOM.render(
+//   (<Provider store={store}>
+//     <App />
+//   </Provider>),
+//   document.getElementById('root')
+// )
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}><App /></Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+```
+* Connect负责从外部获取组件需要的参数
+```js
+// App.js
+import { connect } from 'react-redux';
+import { add, reduce, addAsync } from './index.redux';
+
+// react-redux
+const mapStateToProps = (state) => {
+  return {
+    num: state
+  }
+}
+const actionCreateors = { add, reduce, addAsync }
+App = connect(mapStateToProps, actionCreateors)(App)
+
+export default App;
+
+```
+* 使用装饰器优化connect代码
+`cnpm i @babel/plugin-proposal-decorators --save-dev`
+```json
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd-mobile",
+        "style": "css"
+      }
+    ],
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ]
+  ]
+},
+```
+```js
+// App.js
+// react-redux
+@connect(
+  // 你要state什么属性放到props里
+  state => ({num: state}),
+  // 你要什么方法， 放到props里，自动dispatch
+  { add, reduce, addAsync }
+)
+```

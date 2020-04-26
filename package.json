@@ -150,10 +150,17 @@
           "libraryName": "antd-mobile",
           "style": "css"
         }
+      ],
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
       ]
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.8.3",
     "babel-plugin-import": "^1.13.0"
   }
 }

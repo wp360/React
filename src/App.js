@@ -3,27 +3,34 @@ import {
   Button,
   List
 } from 'antd-mobile';
+import { connect } from 'react-redux';
+import { add, reduce, addAsync } from './index.redux';
 // import 'antd-mobile/dist/antd-mobile.css';
 // import 'antd-mobile/es/button/style/index.css';
 
+// react-redux
+@connect(
+  // 你要state什么属性放到props里
+  state => ({num: state}),
+  // 你要什么方法， 放到props里，自动dispatch
+  { add, reduce, addAsync }
+)
+
 class App extends React.Component{
   render() {
-    const store = this.props.store
-    const num = store.getState()
-    const add = this.props.add
-    const reduce = this.props.reduce
-    const addAsync = this.props.addAsync
+    // const store = this.props.store
+    // const num = store.getState()
     return (
       <div className="App">
         <h1>React 面试</h1>
         <NewComponent boss="CTO" />
         <Interview boss="Mr.黄" />
-        <p>已经掌握技能{num}种</p>
-        <Button type="primary" onClick={()=>store.dispatch(add())}>新增</Button>
+        <p>已经掌握技能{this.props.num}种</p>
+        <Button type="primary" onClick={this.props.add}>新增</Button>
         <br/>
-        <Button type="primary" onClick={()=>store.dispatch(reduce())}>减少</Button>
+        <Button type="primary" onClick={this.props.reduce}>减少</Button>
         <br/>
-        <Button type="primary" onClick={()=>store.dispatch(addAsync())}>等待新增</Button>
+        <Button type="primary" onClick={this.props.addAsync}>等待新增</Button>
       </div>
     )
   }

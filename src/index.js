@@ -9,12 +9,8 @@ import {
   compose
 } from 'redux';
 import thunk from 'redux-thunk';
-import {
-  counter,
-  add,
-  reduce,
-  addAsync
-} from './index.redux';
+import { Provider } from 'react-redux';
+import { counter } from './index.redux';
 
 // const store = createStore(counter, applyMiddleware(thunk));
 const store = createStore(counter, compose(
@@ -22,18 +18,12 @@ const store = createStore(counter, compose(
   window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
-function render() {
-  ReactDOM.render(
-    <React.StrictMode>
-      <App store={store} add={add} reduce={reduce} addAsync={addAsync} />
-    </React.StrictMode>,
-    document.getElementById('root')
-  );
-}
-
-render()
-
-store.subscribe(render)
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}><App /></Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
