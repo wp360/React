@@ -333,4 +333,157 @@ export default App;
 · 直接import会加载所有组件，需要自定义配置按需加载
 · 个性化配置后面统一配置（需要执行npm run eject)
 ```
-[参考文档：](https://mobile.ant.design/docs/react/introduce-cn)
+[参考文档：https://mobile.ant.design/docs/react/introduce-cn](https://mobile.ant.design/docs/react/introduce-cn)
+## 组件使用
+* props传递数据
+* props传递函数
+* props类型检查
+## setState
+```js
+// 不可变值（函数式编程，纯函数） - 数组
+const list5Copy = this.state.list5.slice()
+list5Copy.splice(2, 0, 'a') // 中间插入/删除
+this.setState({
+    list1: this.state.list1.concat(100), // 追加
+    list2: [...this.state.list2, 100], // 追加
+    list3: this.state.list3.slice(0, 3), // 截取
+    list4: this.state.list4.filter(item => item > 100), // 筛选
+    list5: list5Copy // 其他操作
+})
+// 注意，不能直接对 this.state.list 进行 push pop splice 等，这样违反不可变值
+
+// 不可变值 - 对象
+this.setState({
+    obj1: Object.assign({}, this.state.obj1, {a: 100}),
+    obj2: {...this.state.obj2, a: 100}
+})
+// 注意，不能直接对 this.state.obj 进行属性设置，这样违反不可变值
+```
+## Redux
+* 1. 基本使用
+```js
+// App.js
+import { createStore } from 'redux'
+// ...
+// redux
+function counter(state = 0, action) {
+  switch (action.type) {
+    case 'add':
+      return state + 1
+    case 'reduce':
+      return state - 1
+    default:
+      return 10
+  }
+}
+
+// 新建store
+const store = createStore(counter)
+const init = store.getState()
+console.log(init)
+
+// 订阅
+function listener() {
+  const current = store.getState()
+  console.log(`现在拥有技能${current}`)
+}
+store.subscribe(listener)
+
+// 派发事件 传递action
+store.dispatch({
+  type: 'add'
+})
+// console.log(store.getState())
+store.dispatch({
+  type: 'reduce'
+})
+// console.log(store.getState())
+```
+* 2. redux如何和React一起用
+> 把store.dispatch方法传递给组件，内部可以调用修改状态
+> subscribe订阅render函数，每次修改都重新渲染
+> redux相关内容，移到单独的文件进行管理
+```js
+// index.redux.js
+const ADD = 'add'
+const REDUCE = 'reduce'
+// reducer
+export function counter(state = 0, action) {
+  switch (action.type) {
+    case ADD:
+      return state + 1
+    case REDUCE:
+      return state - 1
+    default:
+      return 10
+  }
+}
+// action creator
+export function add() {
+  return {
+    type: ADD
+  }
+}
+
+export function reduce() {
+  return {
+    type: REDUCE
+  }
+}
+
+// index.js
+
+// App.js
+  render() {
+    const store = this.props.store
+    const num = store.getState()
+    const add = this.props.add
+    const reduce = this.props.reduce
+    return (
+      <div className="App">
+        {/* 省略 */}
+        <Button type="primary" onClick={()=>store.dispatch(add())}>新增</Button>
+        <br/>
+        <Button type="primary" onClick={()=>store.dispatch(reduce())}>减少</Button>
+      </div>
+    )
+  }
+```
+* 3. 处理异步、调试工具、更优雅的和React结合
+```
+· Redux处理异步，需要redux-thunk插件
+
+npm install redux-thunk --save
+使用applyMiddleware开启thunk中间件
+action可以返回函数，使用dispatch提交action
+
+· npm install redux-devtools-extension并且开启
+· 使用react-redux优雅的链接react和redux
+```
+```js
+// index.js
+import {createStore, applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
+import { counter, add, reduce } from './index.redux'
+
+const store = createStore(counter, applyMiddleware(thunk))
+// 添加异步方法
+```
+## 调试工具
+* Chrome搜索redux安装
+* 新建store的时候判断window.devToolsExtension
+* 使用compose结合thunk和window.devToolsExtension
+* 调试窗的redux选项卡，实时看到state
+```js
+// index.js
+import {createStore, applyMiddleware, compose} from 'redux'
+const store = createStore(counter, compose(
+  applyMiddleware(thunk),
+  window.devToolsExtension?window.devToolsExtension():f=>f
+))
+```
+## 优雅管理
+* 使用react-redux
+* 安装 npm install react-redux --save
+* 忘记subscribe，记住reducer，action和dispatch即可
+* react-redux提供Provider和connect两个接口来连接
