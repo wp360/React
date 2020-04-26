@@ -568,3 +568,24 @@ export default App;
 `npm install react-router-dom --save`
 
 [https://reacttraining.com/react-router/web/guides/quick-start](https://reacttraining.com/react-router/web/guides/quick-start)
+
+#### 报错原文
+> Objects are not valid as a React child (found: object with keys {counter, auth}). If you meant to render a collection of children, use an array instead.
+```js
+// 对象作为React子对象无效（找到：具有键{counter，auth}的对象）。如果您要渲染子集合，请使用数组。
+// 解决办法：
+// App.js
+@connect(
+  // num: state 改成 num: state.counter
+  state => ({num: state.counter}),
+  { add, reduce, addAsync }
+)
+```
+> 针对这类无法直观判断报错问题原因的情况，只能先定位到报错信息显示的具体某个位置，然后修改相关联的代码来排除。在有疑惑的位置输出对应的状态或者数据进行判断，最终排除报错的问题。
+
+[https://www.codeleading.com/article/41021713223/](https://www.codeleading.com/article/41021713223/)
+
+## 路由和Redux配合-复杂 Redux应用
+* 登录
+* 没有登录信息 统一跳转login
+* 页面 导航+显示+注销

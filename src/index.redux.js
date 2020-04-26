@@ -1,14 +1,15 @@
 const ADD = 'add'
 const REDUCE = 'reduce'
 // reducer
-export function counter(state = 0, action) {
+export function counter(state = 10, action) {
+  // console.log(state)
   switch (action.type) {
     case ADD:
       return state + 1
     case REDUCE:
       return state - 1
     default:
-      return 10
+      return state
   }
 }
 // action creator
