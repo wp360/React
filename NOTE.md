@@ -589,3 +589,9 @@ export default App;
 * 登录
 * 没有登录信息 统一跳转login
 * 页面 导航+显示+注销
+
+## 前后端联调
+* 1. axios
+`npm i axios --save`
+* 2. 引入及调用
+* 3. axios.interceptors设置拦截器，比如全局的loading

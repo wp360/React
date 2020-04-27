@@ -22,6 +22,8 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
+// 拦截器
+import './config'
 // const store = createStore(counter, applyMiddleware(thunk));
 // counter
 const store = createStore(reducers, compose(
